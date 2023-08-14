@@ -1,0 +1,21 @@
+{
+  "name": "inventory-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "postgres_1",
+    "database.port": "5433",
+    "database.user": "postgres",
+    "database.password": "123",
+    "database.server.id": "184054",
+    "database.dbname" : "postgres",
+    "topic.prefix": "fulfillment",
+    "database.include.list": "inventory, postgres",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
+    "schema.history.internal.kafka.topic": "schema-changes.inventory",
+    "transforms": "route",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
+    "transforms.route.replacement": "$3"
+  }
+}
