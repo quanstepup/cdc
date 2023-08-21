@@ -14,43 +14,67 @@ services:
       - zookeeper
     environment:
       - ZOOKEEPER_CONNECT=zookeeper:2181
-  postgres_1:
-    image: debezium/postgres:latest
+#  kafka-ui:
+#    image: provectuslabs/kafka-ui:latest
+#    ports:
+#      - "3030:3030"
+#    environment:
+#      - KAFKA_CLUSTERS_0_NAME=MyKafkaCluster
+#      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:9092
+#    depends_on:
+#      - kafka
+  mysql:
+    image: mysql:latest
     ports:
-      - "5433:5432"
+      - 3307:3306
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123
-      - POSTGRES_DB=inventory
-  postgres_2:
-    image: debezium/postgres:latest
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=123
+      - MYSQL_DATABASE=inventory
+    security_opt:
+      - seccomp:unconfined
+  postgres:
+    image: postgres
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123
       - POSTGRES_DB=inventory
-  elastic:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
-    ports:
-      - "9200:9200"
-    environment:
-      - http.host=0.0.0.0
-      - transport.host=127.0.0.1
-      - xpack.security.enabled=false
   connect:
-    image: quay.io/debezium/connect:latest
+    image: debezium/connect:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DEBEZIUM_VERSION: ${DEBEZIUM_VERSION}
     ports:
       - 8083:8083
       - 5005:5005
     links:
       - kafka
-      - postgres_1
-      - postgres_2
-      - elastic
+      - mysql
+      - postgres
     environment:
       - BOOTSTRAP_SERVERS=kafka:9092
       - GROUP_ID=1
       - CONFIG_STORAGE_TOPIC=my_connect_configs
       - OFFSET_STORAGE_TOPIC=my_connect_offsets
       - STATUS_STORAGE_TOPIC=my_source_connect_statuses
+  debezium-ui:
+    image: debezium/debezium-ui:1.9
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CONNECT_URIS: http://connect:8083
+    depends_on:
+      - connect
+  kafka-ui:
+    image: landoop/fast-data-dev:latest
+    ports:
+      - "3030:3030"
+    environment:
+      ADV_HOST: 127.0.0.1
+    depends_on:
+      - kafka

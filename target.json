@@ -4,7 +4,7 @@
     "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
     "tasks.max": "1",
     "topics": "customers",
-    "connection.url": "jdbc:postgresql://localhost:5432/inventory?user=postgres&password=123",
+    "connection.url": "jdbc:postgresql://postgres:5432/inventory?user=postgres&password=123",
     "transforms": "unwrap",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
@@ -12,6 +12,10 @@
     "insert.mode": "upsert",
     "delete.enabled": "true",
     "pk.fields": "id",
-    "pk.mode": "record_key"
+    "pk.mode": "record_key",
+    "key.converter":"org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable":"true",
+    "value.converter":"org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable":"true"
   }
 }

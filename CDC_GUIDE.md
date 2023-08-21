@@ -1,0 +1,3 @@
+- Chạy docker compose:  docker-compose up --build
+- Tạo kết nối với database nguồn: curl --location POST 'http://localhost:8083/connectors'  - Copy request body từ file source.json
+- Tạo kết nối với database đích: curl --location POST 'http://localhost:8083/connectors'  - Copy request body từ file target.json
