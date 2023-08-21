@@ -3,9 +3,11 @@
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
     "tasks.max": "1",
-    "topics": "customers",
-    "connection.url": "jdbc:postgresql://postgres:5432/inventory?user=postgres&password=123",
-    "transforms": "unwrap",
+    "topics.regex": "sink-db.inventory.(.*)",
+    "connection.url": "jdbc:mysql://mysql-target:3308/inventory?user=root&password=123&verifyServerCertificate=true&useSSL=false&allowPublicKeyRetrieval=true",
+    "dialect.name": "MySqlDatabaseDialect",
+    "table.name.format": "${topic}",
+    "transforms": "unwrap, route",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
     "auto.create": "true",
@@ -16,6 +18,9 @@
     "key.converter":"org.apache.kafka.connect.json.JsonConverter",
     "key.converter.schemas.enable":"true",
     "value.converter":"org.apache.kafka.connect.json.JsonConverter",
-    "value.converter.schemas.enable":"true"
+    "value.converter.schemas.enable":"true",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
+    "transforms.route.replacement": "$3"
   }
 }
