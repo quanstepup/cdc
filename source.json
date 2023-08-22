@@ -1,23 +1,28 @@
 {
   "name": "inventory-connector",
   "config": {
-    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "tasks.max": "1",
     "topic.prefix": "sink-db",
-    "database.hostname": "mysql-source",
-    "database.port": "3306",
-    "database.user": "root",
+    "database.server.name": "postgres",
+    "database.hostname": "postgres-source",
+    "database.port": "5432",
+    "database.user": "postgres",
     "database.password": "123",
     "database.server.id": "1",
     "database.dbname": "inventory",
-    "database.include.list": "inventory",
-    "database.allowPublicKeyRetrieval":"true",
+    "table.include.list": "public.(.*)",
+    "heartbeat.interval.ms": "5000",
+    "slot.name": "dbname_debezium",
+    "publication.name": "dbname_publication",
     "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
     "schema.history.internal.kafka.topic": "schema-changes.inventory",
     "max.request.size" :"104857600",
     "key.converter":"org.apache.kafka.connect.json.JsonConverter",
     "key.converter.schemas.enable":"true",
     "value.converter":"org.apache.kafka.connect.json.JsonConverter",
-    "value.converter.schemas.enable":"true"
+    "value.converter.schemas.enable":"true",
+    "plugin.name": "pgoutput",
+    "publication.autocreate.mode": "all_tables"
   }
 }

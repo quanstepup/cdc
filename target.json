@@ -3,11 +3,11 @@
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
     "tasks.max": "1",
-    "topics.regex": "sink-db.inventory.(.*)",
-    "connection.url": "jdbc:mysql://mysql-target:3308/inventory?user=root&password=123&verifyServerCertificate=true&useSSL=false&allowPublicKeyRetrieval=true",
-    "dialect.name": "MySqlDatabaseDialect",
+    "topics.regex": "sink-db.public.(.*)",
+    "connection.url": "jdbc:postgresql://postgres-target:5432/inventory?user=postgres&password=123",
+    "dialect.name": "PostgreSqlDatabaseDialect",
     "table.name.format": "${topic}",
-    "transforms": "unwrap, route",
+    "transforms": "unwrap, route, copyFieldToKey, extractKeyFromStruct",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
     "auto.create": "true",
@@ -21,6 +21,12 @@
     "value.converter.schemas.enable":"true",
     "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
     "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
-    "transforms.route.replacement": "$3"
+    "transforms.route.replacement": "$3",
+    "mode":"incrementing",
+    "incrementing.column.name":"id",
+    "transforms.copyFieldToKey.type":"org.apache.kafka.connect.transforms.ValueToKey",
+    "transforms.copyFieldToKey.fields":"id",
+    "transforms.extractKeyFromStruct.type":"org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractKeyFromStruct.field":"id"
   }
 }

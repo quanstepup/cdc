@@ -28,31 +28,28 @@ services:
   #      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:9092
   #    depends_on:
   #      - kafka
-  mysql:
-    image: mysql:latest
-    container_name: "mysql-source"
+  postgres:
+    image: postgres:latest
+    container_name: "postgres-source"
     ports:
-      - 3307:3306
+      - 5433:5432
     environment:
-      - MYSQL_ROOT_PASSWORD=123
-      - MYSQL_USER=mysql
-      - MYSQL_PASSWORD=123
-      - MYSQL_DATABASE=inventory
-    security_opt:
-      - seccomp:unconfined
-  mysql_2:
-    image: mysql:latest
-    container_name: "mysql-target"
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=inventory
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    command: [ 'postgres', '-c', 'wal_level=logical' ]
+  postgres_2:
+    image: postgres:latest
+    container_name: "postgres-target"
     ports:
-      - 3309:3308
+      - 5434:5432
     environment:
-      - MYSQL_ROOT_PASSWORD=123
-      - MYSQL_USER=mysql
-      - MYSQL_PASSWORD=123
-      - MYSQL_DATABASE=inventory
-      - MYSQL_TCP_PORT=3308
-    security_opt:
-      - seccomp:unconfined
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=inventory
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    command: [ 'postgres', '-c', 'wal_level=logical' ]
   connect:
     image: debezium/connect:latest
     build:
@@ -65,8 +62,8 @@ services:
       - 5005:5005
     links:
       - kafka
-      - mysql
-      - mysql_2
+      - postgres
+      - postgres_2
     environment:
       - BOOTSTRAP_SERVERS=kafka:9092
       - GROUP_ID=1
