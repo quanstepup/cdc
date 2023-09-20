@@ -7,9 +7,6 @@
     "connection.url": "jdbc:postgresql://postgres-target:5432/inventory?user=postgres&password=123",
     "dialect.name": "PostgreSqlDatabaseDialect",
     "table.name.format": "${topic}",
-    "transforms": "unwrap, route, copyFieldToKey, extractKeyFromStruct",
-    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-    "transforms.unwrap.drop.tombstones": "false",
     "auto.create": "true",
     "insert.mode": "upsert",
     "delete.enabled": "true",
@@ -24,9 +21,16 @@
     "transforms.route.replacement": "$3",
     "mode":"incrementing",
     "incrementing.column.name":"id",
-    "transforms.copyFieldToKey.type":"org.apache.kafka.connect.transforms.ValueToKey",
-    "transforms.copyFieldToKey.fields":"id",
-    "transforms.extractKeyFromStruct.type":"org.apache.kafka.connect.transforms.ExtractField$Key",
-    "transforms.extractKeyFromStruct.field":"id"
+    "transforms": "unwrap, route",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "delete.handling.mode": "none"
   }
 }
+
+//"transforms.copyFieldToKey.type":"org.apache.kafka.connect.transforms.ValueToKey",
+//"transforms.copyFieldToKey.fields":"id",
+//"transforms.extractKeyFromStruct.type":"org.apache.kafka.connect.transforms.ExtractField$Key",
+//"transforms.extractKeyFromStruct.field":"id",
+
+//"transforms": "unwrap, route, copyFieldToKey, extractKeyFromStruct",

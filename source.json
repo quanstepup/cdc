@@ -1,17 +1,17 @@
 {
-  "name": "inventory-connector",
+  "name": "tofu-connector",
   "config": {
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "tasks.max": "1",
     "topic.prefix": "sink-db",
     "database.server.name": "postgres",
-    "database.hostname": "postgres-source",
-    "database.port": "5432",
-    "database.user": "postgres",
-    "database.password": "123",
+    "database.hostname": "",
+    "database.port": "",
+    "database.user": "",
+    "database.password": "",
     "database.server.id": "1",
-    "database.dbname": "inventory",
-    "table.include.list": "public.(.*)",
+    "database.dbname": "",
+    "table.exclude.list": "public.cache_audio, public.extend_paragraph_conjunction, public.aptitude_test_data",
     "heartbeat.interval.ms": "5000",
     "slot.name": "dbname_debezium",
     "publication.name": "dbname_publication",
@@ -26,3 +26,8 @@
     "publication.autocreate.mode": "all_tables"
   }
 }
+
+
+//"table.include.list": "public.(.*)",
+
+//"table.include.list": ""
