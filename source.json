@@ -23,7 +23,8 @@
     "value.converter":"org.apache.kafka.connect.json.JsonConverter",
     "value.converter.schemas.enable":"true",
     "plugin.name": "pgoutput",
-    "publication.autocreate.mode": "all_tables"
+    "publication.autocreate.mode": "all_tables",
+    "time.precision.mode": "connect"
   }
 }
 
