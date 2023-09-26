@@ -1,3 +1,5 @@
 - Chạy docker compose:  docker-compose up --build
 - Tạo kết nối với database nguồn: curl --location POST 'http://localhost:8083/connectors'  - Copy request body từ file source.json
+- Tạo table bất kì ở database nguồn
 - Tạo kết nối với database đích: curl --location POST 'http://localhost:8083/connectors'  - Copy request body từ file target.json
+- Khi tạo kết nối đến database đích, chỉ có thể sink được table đã được tạo ở database nguồn, với table mới, phải tạo kết nối đích mới
