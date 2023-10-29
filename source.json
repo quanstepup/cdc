@@ -1,34 +1,36 @@
 {
-  "name": "tofu-connector",
+  "name": "main-connector-prod",
   "config": {
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "tasks.max": "1",
-    "topic.prefix": "sink-db",
+    "topic.prefix": "sink-db-main-prod",
+    "metrics.prefix": "sink-db-main-prod",
+    "publication.name": "db_main_prod_publication",
+    "publication.autocreate.mode": "all_tables",
+    "slot.name": "db_main_prod",
     "database.server.name": "postgres",
-    "database.hostname": "",
-    "database.port": "",
-    "database.user": "",
-    "database.password": "",
+    "database.hostname": "***",
+    "database.port": "***",
+    "database.user": "***",
+    "database.password": "***",
     "database.server.id": "1",
-    "database.dbname": "",
+    "database.dbname": "db_app_tofu_main_prod",
     "table.exclude.list": "public.cache_audio, public.extend_paragraph_conjunction, public.aptitude_test_data",
+    "column.exclude.list":"public.ab_testing_rate.description",
     "heartbeat.interval.ms": "5000",
-    "slot.name": "dbname_debezium",
-    "publication.name": "dbname_publication",
     "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
     "schema.history.internal.kafka.topic": "schema-changes.inventory",
-    "max.request.size" :"104857600",
-    "key.converter":"org.apache.kafka.connect.json.JsonConverter",
-    "key.converter.schemas.enable":"true",
-    "value.converter":"org.apache.kafka.connect.json.JsonConverter",
-    "value.converter.schemas.enable":"true",
+    "max.request.size": "1048576000",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
     "plugin.name": "pgoutput",
-    "publication.autocreate.mode": "all_tables",
-    "time.precision.mode": "connect"
+    "time.precision.mode": "connect",
+    "max.batch.size": "40960",
+    "max.queue.size": "163840",
+    "offset.flush.timeout.ms": "60000",
+    "offset.flush.interval.ms": "10000",
+    "snapshot.fetch.size": "51200"
   }
 }
-
-
-//"table.include.list": "public.(.*)",
-
-//"table.include.list": ""
